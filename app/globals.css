@@ -12,6 +12,10 @@
   --accent: #2f6bff;
   --accent-soft: #eaf0ff;
   --danger: #d64545;
+  --violet-bg: #f7f4ff;
+  --violet-bg-2: #efe9ff;
+  --violet-line: #e3dafa;
+  --violet-ink: #7c5cd6;
   --radius: 14px;
   --shadow: 0 1px 2px rgba(20, 22, 28, 0.04), 0 6px 20px -12px rgba(20, 22, 28, 0.18);
   --nav-h: 58px;
@@ -216,15 +220,18 @@ button { font-family: inherit; }
 .article-hero { width: 100%; border-radius: var(--radius); margin-bottom: 28px; display: block; }
 
 .prose { font-size: 16.5px; line-height: 1.8; color: #22252b; }
-.prose p { margin: 0 0 18px; }
+.prose p { margin: 0 0 15px; }
 .prose h1, .prose h2, .prose h3, .prose h4 { line-height: 1.4; margin: 36px 0 13px; letter-spacing: -0.025em; }
-.prose h1 { font-size: 25px; } .prose h2 { font-size: 21px; } .prose h3 { font-size: 17.5px; }
-.prose ul, .prose ol { margin: 0 0 18px; padding-left: 22px; }
+.prose h1 { font-size: 27px; }
+.prose h2 { font-size: 24px; }
+.prose h3 { font-size: 20px; }
+.prose h4 { font-size: 17.5px; }
+.prose ul, .prose ol { margin: 0 0 15px; padding-left: 22px; }
 .prose li { margin-bottom: 7px; }
 .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
 .prose img { max-width: 100%; height: auto; border-radius: 10px; margin: 10px 0; display: block; }
 .prose blockquote {
-  margin: 0 0 18px; padding: 4px 0 4px 17px;
+  margin: 0 0 15px; padding: 4px 0 4px 17px;
   border-left: 3px solid var(--line); color: var(--ink-2);
 }
 .prose pre {
@@ -457,36 +464,37 @@ textarea { resize: vertical; min-height: 70px; }
 /* ============ 토글 블록 (details/summary) ============ */
 .prose details,
 .editor-area details {
-  border: 1px solid var(--line); border-radius: 10px;
-  background: var(--surface-2);
-  margin: 0 0 18px; padding: 0;
+  border: 1px solid var(--violet-line); border-radius: 12px;
+  background: var(--violet-bg);
+  margin: 0 0 15px; padding: 0;
 }
 .prose details > summary,
 .editor-area details > summary {
   list-style: none; cursor: pointer;
-  padding: 13px 16px 13px 38px; position: relative;
-  font-size: 15.5px; font-weight: 700; line-height: 1.5; color: var(--ink);
-  border-radius: 10px;
+  padding: 14px 18px 14px 40px; position: relative;
+  font-size: inherit; font-weight: 700; line-height: 1.65; color: var(--ink);
+  border-radius: 12px;
 }
 .prose details > summary::-webkit-details-marker,
 .editor-area details > summary::-webkit-details-marker { display: none; }
 .prose details > summary::before,
 .editor-area details > summary::before {
-  content: "▸"; position: absolute; left: 16px; top: 50%;
-  transform: translateY(-50%); color: var(--ink-3); font-size: 13px;
+  content: "▸"; position: absolute; left: 18px; top: 50%;
+  transform: translateY(-50%); color: var(--violet-ink); font-size: 13px;
   transition: transform 0.15s ease;
 }
 .prose details[open] > summary::before,
 .editor-area details[open] > summary::before {
   transform: translateY(-50%) rotate(90deg);
 }
-.prose details > summary:hover { background: #eef0f3; }
+.prose details > summary:hover { background: var(--violet-bg-2); }
 .prose details > div[data-toggle-content],
 .editor-area details > div[data-toggle-content] {
-  padding: 2px 16px 6px 38px; border-top: 1px solid var(--line);
+  padding: 4px 18px 8px 40px; border-top: 1px solid var(--violet-line);
+  font-size: inherit;
 }
 .prose details > div[data-toggle-content] > *:last-child,
-.editor-area details > div[data-toggle-content] > *:last-child { margin-bottom: 8px; }
+.editor-area details > div[data-toggle-content] > *:last-child { margin-bottom: 10px; }
 
 /* 에디터 안에서는 항상 펼쳐 보이게 (편집 가능하도록) */
 .editor-area details > div[data-toggle-content] { display: block; }

@@ -138,6 +138,10 @@ export default function Editor({ value, onChange }: Props) {
           onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
           H2
         </Btn>
+        <Btn editor={editor} title="제목 3" active={editor?.isActive("heading", { level: 4 })}
+          onClick={() => editor?.chain().focus().toggleHeading({ level: 4 }).run()}>
+          H3
+        </Btn>
 
         <span className="sep" />
 
