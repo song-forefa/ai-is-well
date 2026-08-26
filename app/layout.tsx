@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   formatDetection: { telephone: false },
+  verification: { google: SITE.googleVerification },
 };
 
 // 검색엔진이 사이트와 운영자를 이해하도록 구조화 데이터를 넣는다.
