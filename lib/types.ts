@@ -24,4 +24,9 @@ export type SiteSettings = {
   tagline: string;
   avatar_url: string | null;
   footer_text: string | null;
+  // 글 하단 에디터 소개 (선택 — migration_author_bio.sql 로 컬럼 추가 시 사용)
+  author_name?: string | null;
+  author_bio?: string | null;
+  author_link_url?: string | null;
+  author_link_label?: string | null;
 };

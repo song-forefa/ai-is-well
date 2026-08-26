@@ -6,6 +6,7 @@ import type { Item, SiteSettings } from "@/lib/types";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Card from "@/components/Card";
+import AuthorBio from "@/components/AuthorBio";
 
 export const dynamic = "force-dynamic";
 
@@ -106,6 +107,8 @@ export default async function PostPage({
             className="prose"
             dangerouslySetInnerHTML={{ __html: post.content_html ?? "" }}
           />
+
+          <AuthorBio settings={settings} />
         </article>
 
         {more.length > 0 ? (

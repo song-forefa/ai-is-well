@@ -400,3 +400,56 @@ textarea { resize: vertical; min-height: 70px; }
 }
 .vbar-links a:hover { background: rgba(255,255,255,.22); color: #fff; }
 .vbar-links a.on { background: #fff; color: var(--ink); }
+
+/* ============ 글 하단 에디터 소개 ============ */
+.bio {
+  margin-top: 48px; padding: 24px 22px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.bio-head { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+.bio-avatar {
+  width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  flex: 0 0 auto; background: var(--surface);
+}
+.bio-avatar-fallback {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; box-shadow: var(--shadow);
+}
+.bio-name { font-size: 15.5px; font-weight: 800; letter-spacing: -0.02em; }
+.bio-handle { font-weight: 600; color: var(--ink-2); }
+.bio-text {
+  margin: 0 0 18px; font-size: 14.5px; line-height: 1.7; color: var(--ink-2);
+  white-space: pre-line;
+}
+.bio-link {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 11px 15px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface);
+  font-size: 13.5px; color: var(--ink-2); line-height: 1.4;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.bio-link:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+.bio-link b { font-weight: 700; color: var(--ink); }
+.bio-ig { font-size: 16px; flex: 0 0 auto; }
+.bio-link-arrow { color: var(--ink-3); flex: 0 0 auto; }
+
+/* ============ C안 모바일: 카드를 가로형으로 (스크롤 단축) ============ */
+@media (max-width: 619px) {
+  .thumbs .grid { gap: 12px; }
+  .thumbs .grid .card { flex-direction: row; align-items: stretch; }
+  .thumbs .grid .card .card-media {
+    flex: 0 0 118px; aspect-ratio: 1 / 1; align-self: stretch;
+  }
+  .thumbs .grid .card .card-media img { height: 100%; }
+  .thumbs .grid .card .kind-chip {
+    top: 6px; left: 6px; font-size: 10px; padding: 2px 6px;
+  }
+  .thumbs .grid .card .card-text {
+    padding: 12px 13px; gap: 5px; justify-content: center; min-width: 0;
+  }
+  .thumbs .grid .card .card-title { font-size: 14.5px; }
+  .thumbs .grid .card .card-summary { font-size: 12.5px; -webkit-line-clamp: 2; }
+  .thumbs .grid .card .card-cat { font-size: 10.5px; padding: 2px 7px; }
+  .thumbs .cat-section { margin-top: 34px; }
+}

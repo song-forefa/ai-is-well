@@ -38,7 +38,7 @@ export default function MagazineHome({
     <>
       <SiteHeader settings={settings} categories={sections.map((s) => s.name)} />
 
-      <main className="site">
+      <main className={`site${variant === "thumbs" ? " thumbs" : ""}`}>
         <Hero items={featured} settings={settings} variant={variant} />
 
         {sections.map((section) => (
