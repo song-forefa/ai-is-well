@@ -453,3 +453,40 @@ textarea { resize: vertical; min-height: 70px; }
   .thumbs .grid .card .card-cat { font-size: 10.5px; padding: 2px 7px; }
   .thumbs .cat-section { margin-top: 34px; }
 }
+
+/* ============ 토글 블록 (details/summary) ============ */
+.prose details,
+.editor-area details {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface-2);
+  margin: 0 0 18px; padding: 0;
+}
+.prose details > summary,
+.editor-area details > summary {
+  list-style: none; cursor: pointer;
+  padding: 13px 16px 13px 38px; position: relative;
+  font-size: 15.5px; font-weight: 700; line-height: 1.5; color: var(--ink);
+  border-radius: 10px;
+}
+.prose details > summary::-webkit-details-marker,
+.editor-area details > summary::-webkit-details-marker { display: none; }
+.prose details > summary::before,
+.editor-area details > summary::before {
+  content: "▸"; position: absolute; left: 16px; top: 50%;
+  transform: translateY(-50%); color: var(--ink-3); font-size: 13px;
+  transition: transform 0.15s ease;
+}
+.prose details[open] > summary::before,
+.editor-area details[open] > summary::before {
+  transform: translateY(-50%) rotate(90deg);
+}
+.prose details > summary:hover { background: #eef0f3; }
+.prose details > div[data-toggle-content],
+.editor-area details > div[data-toggle-content] {
+  padding: 2px 16px 6px 38px; border-top: 1px solid var(--line);
+}
+.prose details > div[data-toggle-content] > *:last-child,
+.editor-area details > div[data-toggle-content] > *:last-child { margin-bottom: 8px; }
+
+/* 에디터 안에서는 항상 펼쳐 보이게 (편집 가능하도록) */
+.editor-area details > div[data-toggle-content] { display: block; }

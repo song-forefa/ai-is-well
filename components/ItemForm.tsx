@@ -206,8 +206,11 @@ export default function ItemForm({ item }: Props) {
             <h2>본문</h2>
             <Editor value={html} onChange={setHtml} />
             <div className="hint" style={{ marginTop: 8 }}>
-              굵게 · 밑줄 · 링크 · 이미지 업로드를 지원합니다. 이미지는 드래그 대신 상단
-              🖼 버튼으로 올려 주세요.
+              굵게 · 밑줄 · 링크 · 이미지 업로드 · 토글을 지원합니다. 이미지는 드래그 대신
+              상단 🖼 버튼으로 올려 주세요.
+              <br />
+              <b>Enter</b> 는 문단을 새로 시작해 위아래 간격이 생기고,{" "}
+              <b>Shift + Enter</b> 는 같은 문단 안에서 줄만 바꿔 간격 없이 붙습니다.
             </div>
           </div>
         </>

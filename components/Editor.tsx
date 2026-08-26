@@ -4,6 +4,7 @@ import { useCallback, useRef } from "react";
 import { useEditor, EditorContent, type Editor as TiptapEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import { ToggleBlock, ToggleContent, ToggleSummary } from "@/lib/tiptap/toggle";
 import { Placeholder } from "@tiptap/extensions";
 
 type Props = {
@@ -57,6 +58,9 @@ export default function Editor({ value, onChange }: Props) {
       }),
       Image.configure({ inline: false, allowBase64: false }),
       Placeholder.configure({ placeholder: "내용을 입력하세요…" }),
+      ToggleBlock,
+      ToggleSummary,
+      ToggleContent,
     ],
     content: value || "",
     editorProps: {
@@ -156,6 +160,10 @@ export default function Editor({ value, onChange }: Props) {
         <Btn editor={editor} title="구분선"
           onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
           ―
+        </Btn>
+        <Btn editor={editor} title="토글 (접었다 펴기)" active={editor?.isActive("toggleBlock")}
+          onClick={() => editor?.chain().focus().insertToggle().run()}>
+          ▸ 토글
         </Btn>
 
         <span className="sep" />

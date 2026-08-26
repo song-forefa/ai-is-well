@@ -10,12 +10,14 @@ export function cleanHtml(dirty: string): string {
       "ul", "ol", "li", "blockquote", "pre", "code", "hr",
       "a", "img", "figure", "figcaption",
       "table", "thead", "tbody", "tr", "th", "td", "span", "div",
+      "details", "summary",
     ],
     allowedAttributes: {
       a: ["href", "target", "rel"],
       img: ["src", "alt", "title", "width", "height"],
       span: ["style"],
-      div: ["style"],
+      // details 의 open 은 일부러 허용하지 않는다 → 공개 페이지에서 접힌 상태로 시작
+      div: ["style", "data-toggle-content"],
       p: ["style"],
       "*": ["class"],
     },
