@@ -337,6 +337,28 @@ textarea { resize: vertical; min-height: 70px; }
 }
 .editor-area .ProseMirror-selectednode { outline: 2px solid var(--accent); border-radius: 8px; }
 
+/* ============ C안: 썸네일 없는 항목의 목록 줄 (prow) ============ */
+.plain-list { border-top: 1px solid var(--line); }
+.plain-list.after-grid { margin-top: 22px; }
+.prow {
+  display: flex; align-items: center; gap: 14px;
+  padding: 15px 4px; border-bottom: 1px solid var(--line);
+  transition: background 0.12s ease, padding-left 0.12s ease;
+}
+.prow:hover { background: var(--surface-2); padding-left: 10px; }
+.prow-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.prow-title {
+  font-size: 15px; font-weight: 700; line-height: 1.5; letter-spacing: -0.015em;
+}
+.prow-summary { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+.prow-right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.prow-cat { font-size: 11.5px; font-weight: 700; color: var(--ink-3); }
+.prow-arrow { font-size: 14px; color: var(--ink-3); }
+.prow:hover .prow-arrow { color: var(--accent); }
+@media (max-width: 520px) {
+  .prow-cat { display: none; }
+}
+
 /* ============ A안: 링크트리형 (lt-) ============ */
 .lt { max-width: 560px; margin: 0 auto; padding: 40px 18px 72px; }
 .lt-profile { text-align: center; padding: 12px 0 28px; }
