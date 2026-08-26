@@ -17,11 +17,10 @@ export default function CategoryField({
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState("");
 
-  // 이 글에만 있는 새 카테고리도 목록에 함께 보여 준다.
+  // 고른 것을 선택한 순서대로 앞에 두고, 나머지 후보를 뒤에 붙인다.
   const all = useMemo(() => {
-    const set = options.filter(Boolean);
-    for (const v of value) if (v && !set.includes(v)) set.push(v);
-    return set;
+    const rest = options.filter((c) => c && !value.includes(c));
+    return [...value.filter(Boolean), ...rest];
   }, [options, value]);
 
   const atMax = value.length >= max;
@@ -41,7 +40,8 @@ export default function CategoryField({
   return (
     <div className="field">
       <label>
-        카테고리 (선택) <span className="label-sub">여러 개 고를 수 있어요</span>
+        카테고리 (선택){" "}
+        <span className="label-sub">여러 개 가능 · 먼저 고른 것이 대표</span>
       </label>
 
       <div className="cat-picker">
@@ -51,12 +51,12 @@ export default function CategoryField({
             <button
               key={c}
               type="button"
-              className={`cat-chip${on ? " on" : ""}`}
+              className={`cat-chip${on ? " on" : ""}${on && value[0] === c ? " lead" : ""}`}
               onClick={() => toggle(c)}
               disabled={!on && atMax}
               title={!on && atMax ? `최대 ${max}개까지 선택할 수 있어요` : undefined}
             >
-              {on ? "✓ " : ""}
+              {on && value[0] === c ? "★ " : on ? "✓ " : ""}
               {c}
             </button>
           );
@@ -95,7 +95,9 @@ export default function CategoryField({
       </div>
 
       <div className="hint">
-        고른 카테고리마다 홈의 해당 섹션에 함께 노출되고, 상단 메뉴에도 표시됩니다.
+        <b>★ 대표 카테고리</b>({value[0] || "미지정"})가 홈에서 이 글이 들어갈 섹션을 정하고,
+        나머지는 카드에 <b>#해시태그</b>로만 붙습니다. 대표를 바꾸려면 지금 선택을 모두 해제하고
+        원하는 것부터 다시 고르세요.
         {value.length === 0 ? " 비워 두면 '그 외' 섹션으로 들어갑니다." : null}
         {atMax ? ` 최대 ${max}개까지 선택할 수 있어요.` : null}
       </div>

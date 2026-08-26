@@ -71,9 +71,6 @@ export default function Hero({
     <section className="hero">
       <div className="hero-intro">
         <h1>{settings.tagline}</h1>
-        <p>
-          AI 툴, 프롬프트, 취업 준비까지 — 직접 써보고 도움이 된 것만 모아 둡니다.
-        </p>
       </div>
 
       <div className={pair ? "hero-pair" : ""}>

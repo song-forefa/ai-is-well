@@ -7,6 +7,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Card from "@/components/Card";
 import { catsOf } from "@/lib/itemView";
+import { SITE } from "@/lib/site";
 import AuthorBio from "@/components/AuthorBio";
 
 export const dynamic = "force-dynamic";
@@ -56,13 +57,35 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const { post } = await load(slug);
-  if (!post) return { title: "찾을 수 없는 글" };
+  if (!post) return { title: "찾을 수 없는 글", robots: { index: false } };
+
+  const url = `/p/${encodeURIComponent(post.slug ?? slug)}`;
+  const desc =
+    post.summary ??
+    `${SITE.name}(${SITE.handle})이 정리한 ${post.title}. ${SITE.description}`;
+
   return {
     title: post.title,
-    description: post.summary ?? undefined,
+    description: desc,
+    keywords: [...catsOf(post), ...SITE.keywords],
+    alternates: { canonical: url },
     openGraph: {
+      type: "article",
+      siteName: SITE.name,
       title: post.title,
-      description: post.summary ?? undefined,
+      description: desc,
+      url,
+      locale: "ko_KR",
+      publishedTime: post.created_at,
+      modifiedTime: post.updated_at,
+      authors: [SITE.name],
+      tags: catsOf(post),
+      images: post.thumbnail_url ? [post.thumbnail_url] : undefined,
+    },
+    twitter: {
+      card: post.thumbnail_url ? "summary_large_image" : "summary",
+      title: post.title,
+      description: desc,
       images: post.thumbnail_url ? [post.thumbnail_url] : undefined,
     },
   };
@@ -83,8 +106,27 @@ export default async function PostPage({
     day: "numeric",
   });
 
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.summary ?? undefined,
+    image: post.thumbnail_url ? [post.thumbnail_url] : undefined,
+    datePublished: post.created_at,
+    dateModified: post.updated_at,
+    author: { "@type": "Person", name: SITE.name, url: SITE.instagram },
+    publisher: { "@type": "Person", name: SITE.name, url: SITE.url },
+    mainEntityOfPage: `${SITE.url}/p/${encodeURIComponent(post.slug ?? slug)}`,
+    keywords: catsOf(post).join(", "),
+    inLanguage: "ko-KR",
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
       <SiteHeader settings={settings} />
 
       <main className="site">
@@ -93,9 +135,9 @@ export default async function PostPage({
             <Link className="article-back" href="/">
               ← 목록으로
             </Link>
-            {catsOf(post).map((c) => (
-              <span className="card-cat" key={c}>
-                {c}
+            {catsOf(post).map((c, i) => (
+              <span className={i === 0 ? "card-cat" : "card-tag"} key={c}>
+                {i === 0 ? c : `#${c}`}
               </span>
             ))}
             <h1>{post.title}</h1>

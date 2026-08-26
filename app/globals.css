@@ -500,3 +500,8 @@ textarea { resize: vertical; min-height: 70px; }
 .field label .label-sub { font-weight: 600; color: var(--ink-3); margin-left: 4px; }
 .cat-chip:disabled { opacity: 0.45; cursor: not-allowed; }
 .card-cat.more { background: var(--surface-2); color: var(--ink-3); }
+
+/* 2순위 이하 카테고리는 해시태그로 */
+.card-tag { font-size: 11.5px; font-weight: 600; color: var(--ink-3); }
+.card-tag:hover { color: var(--ink-2); }
+.cat-chip.lead { background: var(--ink); border-color: var(--ink); color: #fff; }

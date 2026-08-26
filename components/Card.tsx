@@ -18,18 +18,17 @@ export default function Card({ item }: { item: Item }) {
             {glyphFor(item)}
           </span>
         )}
-        <span className={`kind-chip ${item.kind}`}>{external ? "링크" : "글"}</span>
       </div>
 
       <div className="card-text">
         {cats.length > 0 ? (
           <div className="card-tags">
-            {cats.slice(0, 2).map((c) => (
-              <span className="card-cat" key={c}>
-                {c}
+            <span className="card-cat">{cats[0]}</span>
+            {cats.slice(1).map((c) => (
+              <span className="card-tag" key={c}>
+                #{c}
               </span>
             ))}
-            {cats.length > 2 ? <span className="card-cat more">+{cats.length - 2}</span> : null}
           </div>
         ) : null}
         <h3 className="card-title">

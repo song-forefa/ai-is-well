@@ -30,11 +30,13 @@ export function catsOf(item: Item): string[] {
   return one ? [one] : [];
 }
 
-// 카테고리 목록을 정렬 순서(sort_order) 등장 순으로 뽑는다.
+// 홈 섹션이 될 카테고리 목록. 섹션은 각 항목의 1순위 카테고리로만 만든다.
+// (나머지는 카드에 해시태그로만 붙는다)
 export function categoriesInOrder(items: Item[]): string[] {
   const seen: string[] = [];
   for (const it of items) {
-    for (const c of catsOf(it)) if (!seen.includes(c)) seen.push(c);
+    const first = catsOf(it)[0];
+    if (first && !seen.includes(first)) seen.push(first);
   }
   return seen;
 }

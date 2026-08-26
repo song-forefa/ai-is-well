@@ -25,7 +25,7 @@ export default function MagazineHome({
   const sections = [
     ...categories.map((name) => ({
       name,
-      items: rest.filter((i) => catsOf(i).includes(name)),
+      items: rest.filter((i) => catsOf(i)[0] === name),
     })),
     { name: UNCATEGORIZED, items: rest.filter((i) => catsOf(i).length === 0) },
   ].filter((s) => s.items.length > 0);
