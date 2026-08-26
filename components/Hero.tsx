@@ -2,21 +2,27 @@ import Link from "next/link";
 import type { Item, SiteSettings } from "@/lib/types";
 import { glyphFor, itemHref, placeholderStyle, thumbFor, type Variant } from "@/lib/itemView";
 
-// 홈 최상단. 소개 문구 + 맨 위 항목을 크게 노출한다.
-export default function Hero({
+// 히어로 카드 한 장. compact 는 2개 나란히 놓는 칸반용(작게).
+function HeroCard({
   item,
-  settings,
-  variant = "magazine",
+  variant,
+  compact,
 }: {
-  item: Item | null;
-  settings: SiteSettings;
-  variant?: Variant;
+  item: Item;
+  variant: Variant;
+  compact: boolean;
 }) {
-  const external = item?.kind === "link";
-  const thumb = item ? thumbFor(item, variant) : null;
-  const cls = `hero-feature${thumb ? "" : " no-thumb"}`;
+  const external = item.kind === "link";
+  const thumb = thumbFor(item, variant);
+  const cls = [
+    "hero-feature",
+    thumb ? "" : "no-thumb",
+    compact ? "compact" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  const feature = item ? (
+  const inner = (
     <>
       <div className="hero-media">
         {thumb ? (
@@ -43,7 +49,33 @@ export default function Hero({
         </span>
       </div>
     </>
-  ) : null;
+  );
+
+  if (external) {
+    return (
+      <a className={cls} href={itemHref(item)} target="_blank" rel="noopener noreferrer">
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <Link className={cls} href={itemHref(item)}>
+      {inner}
+    </Link>
+  );
+}
+
+// 홈 최상단. 소개 문구 + 상단 항목 1~2개를 크게 노출한다.
+export default function Hero({
+  items,
+  settings,
+  variant = "magazine",
+}: {
+  items: Item[];
+  settings: SiteSettings;
+  variant?: Variant;
+}) {
+  const pair = items.length > 1;
 
   return (
     <section className="hero">
@@ -54,17 +86,11 @@ export default function Hero({
         </p>
       </div>
 
-      {item ? (
-        external ? (
-          <a className={cls} href={itemHref(item)} target="_blank" rel="noopener noreferrer">
-            {feature}
-          </a>
-        ) : (
-          <Link className={cls} href={itemHref(item)}>
-            {feature}
-          </Link>
-        )
-      ) : null}
+      <div className={pair ? "hero-pair" : ""}>
+        {items.map((item) => (
+          <HeroCard key={item.id} item={item} variant={variant} compact={pair} />
+        ))}
+      </div>
     </section>
   );
 }

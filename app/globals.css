@@ -94,7 +94,7 @@ button { font-family: inherit; }
 .hero-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero-media-ph {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: clamp(44px, 12vw, 76px);
+  font-size: clamp(36px, 8vw, 52px);
 }
 .hero-feature.no-thumb .hero-media { aspect-ratio: 16 / 6; }
 .hero-feature-text { padding: 20px 20px 24px; }
@@ -113,12 +113,24 @@ button { font-family: inherit; }
 }
 .hero-feature:hover .hero-cta span { transform: translateX(3px); display: inline-block; }
 
+/* 히어로 2개 칸반 */
+.hero-pair { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 620px) { .hero-pair { grid-template-columns: 1fr 1fr; gap: 20px; } }
+
+.hero-feature.compact .hero-media { aspect-ratio: 16 / 9; }
+.hero-feature.compact.no-thumb .hero-media { aspect-ratio: 16 / 7; }
+.hero-feature.compact .hero-media-ph { font-size: 38px; }
+.hero-feature.compact .hero-feature-text { padding: 18px 18px 22px; }
+.hero-feature.compact .hero-feature-text h2 { font-size: 18px; }
+.hero-feature.compact .hero-feature-text p { font-size: 13.5px; }
+.hero-feature.compact .hero-cta { margin-top: 13px; font-size: 13.5px; }
+
 @media (min-width: 760px) {
   .hero { padding: 52px 0 12px; }
   .hero-intro { margin-bottom: 34px; }
-  .hero-feature { display: grid; grid-template-columns: 1.1fr 1fr; align-items: stretch; }
-  .hero-media { aspect-ratio: auto; height: 100%; min-height: 280px; }
-  .hero-feature-text { padding: 34px 32px; display: flex; flex-direction: column; justify-content: center; }
+  .hero-feature:not(.compact) { display: grid; grid-template-columns: 1.1fr 1fr; align-items: stretch; }
+  .hero-feature:not(.compact) .hero-media { aspect-ratio: auto; height: 100%; min-height: 280px; }
+  .hero-feature:not(.compact) .hero-feature-text { padding: 34px 32px; display: flex; flex-direction: column; justify-content: center; }
 }
 
 /* ============ 카테고리 섹션 + 그리드 ============ */
