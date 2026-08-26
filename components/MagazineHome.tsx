@@ -1,5 +1,5 @@
 import type { Item, SiteSettings } from "@/lib/types";
-import { categoriesInOrder, type Variant } from "@/lib/itemView";
+import { categoriesInOrder } from "@/lib/itemView";
 import Card from "@/components/Card";
 import Hero from "@/components/Hero";
 import SiteHeader from "@/components/SiteHeader";
@@ -7,21 +7,17 @@ import SiteFooter from "@/components/SiteFooter";
 
 const UNCATEGORIZED = "그 외";
 
-// B안(매거진형) / C안(썸네일형) 공용 레이아웃.
-//  magazine(B): 이미지 없이 색 블록 카드. 히어로는 상단 2개를 칸반으로.
-//  thumbs(C)  : 모든 카드에 썸네일. 히어로는 1개를 크게.
+// 홈 레이아웃 — 히어로 + 카테고리 섹션 + 카드 그리드.
 export default function MagazineHome({
   items,
   settings,
-  variant = "magazine",
-  heroCount,
+  heroCount = 1,
 }: {
   items: Item[];
   settings: SiteSettings;
-  variant?: Variant;
   heroCount?: number;
 }) {
-  const n = heroCount ?? (variant === "magazine" ? 2 : 1);
+  const n = heroCount;
   const featured = items.slice(0, n);
   const rest = items.slice(n);
 
@@ -38,8 +34,8 @@ export default function MagazineHome({
     <>
       <SiteHeader settings={settings} categories={sections.map((s) => s.name)} />
 
-      <main className={`site${variant === "thumbs" ? " thumbs" : ""}`}>
-        <Hero items={featured} settings={settings} variant={variant} />
+      <main className="site">
+        <Hero items={featured} settings={settings} />
 
         {sections.map((section) => (
           <section
@@ -53,7 +49,7 @@ export default function MagazineHome({
             </div>
             <div className="grid">
               {section.items.map((item) => (
-                <Card key={item.id} item={item} variant={variant} />
+                <Card key={item.id} item={item} />
               ))}
             </div>
           </section>

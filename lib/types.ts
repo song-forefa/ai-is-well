@@ -24,9 +24,7 @@ export type SiteSettings = {
   tagline: string;
   avatar_url: string | null;
   footer_text: string | null;
-  // 글 하단 에디터 소개 (선택 — migration_author_bio.sql 로 컬럼 추가 시 사용)
-  author_name?: string | null;
-  author_bio?: string | null;
-  author_link_url?: string | null;
-  author_link_label?: string | null;
+  // 글 하단 에디터 소개 (supabase/migration_author_bio.sql 로 컬럼 추가)
+  author_bios?: unknown[] | null;   // 최대 3개 버전
+  author_bio_active?: number | null; // 지금 쓰는 버전 인덱스 (0~2)
 };

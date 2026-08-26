@@ -1,19 +1,11 @@
 import Link from "next/link";
 import type { Item, SiteSettings } from "@/lib/types";
-import { glyphFor, itemHref, placeholderStyle, thumbFor, type Variant } from "@/lib/itemView";
+import { glyphFor, itemHref, placeholderStyle } from "@/lib/itemView";
 
 // 히어로 카드 한 장. compact 는 2개 나란히 놓는 칸반용(작게).
-function HeroCard({
-  item,
-  variant,
-  compact,
-}: {
-  item: Item;
-  variant: Variant;
-  compact: boolean;
-}) {
+function HeroCard({ item, compact }: { item: Item; compact: boolean }) {
   const external = item.kind === "link";
-  const thumb = thumbFor(item, variant);
+  const thumb = item.thumbnail_url;
   const cls = [
     "hero-feature",
     thumb ? "" : "no-thumb",
@@ -69,11 +61,9 @@ function HeroCard({
 export default function Hero({
   items,
   settings,
-  variant = "magazine",
 }: {
   items: Item[];
   settings: SiteSettings;
-  variant?: Variant;
 }) {
   const pair = items.length > 1;
 
@@ -88,7 +78,7 @@ export default function Hero({
 
       <div className={pair ? "hero-pair" : ""}>
         {items.map((item) => (
-          <HeroCard key={item.id} item={item} variant={variant} compact={pair} />
+          <HeroCard key={item.id} item={item} compact={pair} />
         ))}
       </div>
     </section>

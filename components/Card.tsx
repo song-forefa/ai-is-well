@@ -1,27 +1,17 @@
 import Link from "next/link";
 import type { Item } from "@/lib/types";
-import { glyphFor, itemHref, placeholderStyle, thumbFor, type Variant } from "@/lib/itemView";
+import { glyphFor, itemHref, placeholderStyle } from "@/lib/itemView";
 
-// 매거진 그리드의 카드.
-//  magazine(B) : 이미지 없이 얇은 그라디언트 띠 + 이모지
-//  thumbs(C)   : 항상 16:9 썸네일 (없는 항목은 대체 이미지)
-export default function Card({
-  item,
-  variant = "magazine",
-}: {
-  item: Item;
-  variant?: Variant;
-}) {
+// 카드. 썸네일이 있으면 16:9 이미지, 없으면 같은 자리에 그라디언트 + 이모지.
+export default function Card({ item }: { item: Item }) {
   const external = item.kind === "link";
-  const thumb = thumbFor(item, variant);
-  const cls = `card${thumb ? "" : " no-thumb"}`;
 
   const inner = (
     <>
       <div className="card-media">
-        {thumb ? (
+        {item.thumbnail_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={thumb} alt="" loading="lazy" />
+          <img src={item.thumbnail_url} alt="" loading="lazy" />
         ) : (
           <span className="card-media-ph" style={placeholderStyle(item.id)}>
             {glyphFor(item)}
@@ -31,9 +21,11 @@ export default function Card({
       </div>
 
       <div className="card-text">
-        <div className="card-tags">
-          {item.category ? <span className="card-cat">{item.category}</span> : null}
-        </div>
+        {item.category ? (
+          <div className="card-tags">
+            <span className="card-cat">{item.category}</span>
+          </div>
+        ) : null}
         <h3 className="card-title">
           {item.emoji ? `${item.emoji} ` : ""}
           {item.title}
@@ -45,13 +37,13 @@ export default function Card({
 
   if (external) {
     return (
-      <a className={cls} href={itemHref(item)} target="_blank" rel="noopener noreferrer">
+      <a className="card" href={itemHref(item)} target="_blank" rel="noopener noreferrer">
         {inner}
       </a>
     );
   }
   return (
-    <Link className={cls} href={itemHref(item)}>
+    <Link className="card" href={itemHref(item)}>
       {inner}
     </Link>
   );

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { SiteSettings } from "@/lib/types";
 import ImageField from "@/components/ImageField";
+import BioVersions from "@/components/BioVersions";
+import { activeIndex, bioVersions, type BioVersion } from "@/lib/authorBio";
 
 export default function SettingsForm({ initial }: { initial: SiteSettings }) {
   const router = useRouter();
@@ -11,6 +13,8 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
   const [tagline, setTagline] = useState(initial.tagline ?? "");
   const [avatar, setAvatar] = useState(initial.avatar_url ?? "");
   const [footer, setFooter] = useState(initial.footer_text ?? "");
+  const [bios, setBios] = useState<BioVersion[]>(() => bioVersions(initial));
+  const [bioActive, setBioActive] = useState(() => activeIndex(initial));
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -26,6 +30,8 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
         tagline,
         avatar_url: avatar,
         footer_text: footer,
+        author_bios: bios,
+        author_bio_active: bioActive,
       }),
     });
     setSaving(false);
@@ -56,6 +62,19 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
           <div className="field">
             <label>하단 문구 (선택)</label>
             <input type="text" value={footer} onChange={(e) => setFooter(e.target.value)} />
+          </div>
+
+          <div className="field">
+            <label>글 하단 에디터 소개</label>
+            <div className="hint" style={{ marginTop: 0, marginBottom: 10 }}>
+              모든 글 본문 아래에 자동으로 붙습니다. 버전 3개를 저장해 두고 골라 쓸 수 있습니다.
+            </div>
+            <BioVersions
+              versions={bios}
+              active={bioActive}
+              onChange={setBios}
+              onActiveChange={setBioActive}
+            />
           </div>
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
             <button className="btn primary" onClick={save} disabled={saving}>

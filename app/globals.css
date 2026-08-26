@@ -352,64 +352,6 @@ textarea { resize: vertical; min-height: 70px; }
 }
 .editor-area .ProseMirror-selectednode { outline: 2px solid var(--accent); border-radius: 8px; }
 
-/* ============ A안: 링크트리형 (lt-) ============ */
-.lt { max-width: 560px; margin: 0 auto; padding: 40px 18px 72px; }
-.lt-profile { text-align: center; padding: 12px 0 28px; }
-.lt-avatar {
-  width: 88px; height: 88px; border-radius: 50%; object-fit: cover;
-  margin: 0 auto 14px; display: block; background: var(--surface); box-shadow: var(--shadow);
-}
-.lt-avatar-fallback { display: flex; align-items: center; justify-content: center; font-size: 34px; }
-.lt-profile h1 { margin: 0 0 8px; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
-.lt-profile p { margin: 0; font-size: 15px; font-weight: 600; color: var(--ink-2); line-height: 1.5; }
-
-.lt-cards { display: flex; flex-direction: column; gap: 14px; }
-.lt-card {
-  display: block; background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 18px;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-.lt-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(20,22,28,.06), 0 14px 28px -16px rgba(20,22,28,.28);
-}
-.lt-row { display: flex; align-items: center; gap: 14px; }
-.lt-body { flex: 1 1 auto; min-width: 0; }
-.lt-title { font-size: 16px; font-weight: 700; line-height: 1.45; letter-spacing: -0.01em; }
-.lt-summary { margin-top: 5px; font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
-.lt-tag {
-  display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700;
-  color: var(--accent); background: var(--accent-soft); padding: 3px 8px; border-radius: 999px;
-}
-.lt-arrow { flex: 0 0 auto; color: var(--ink-3); font-size: 18px; }
-.lt-card.centered .lt-title { text-align: center; }
-.lt-footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--ink-3); }
-
-/* ============ 디자인 비교용 하단 바 ============ */
-.vpage { padding-bottom: 72px; }
-.vbar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-  background: rgba(20, 22, 28, 0.92);
-  backdrop-filter: saturate(180%) blur(12px);
-  color: #fff;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.vbar-inner {
-  max-width: var(--site-max); margin: 0 auto; padding: 11px 18px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-}
-.vbar-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.82); }
-.vbar-label b { color: #fff; font-weight: 800; }
-.vbar-links { display: flex; gap: 6px; flex: 0 0 auto; }
-.vbar-links a {
-  width: 34px; height: 32px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13.5px; font-weight: 800;
-  background: rgba(255,255,255,.12); color: rgba(255,255,255,.85);
-}
-.vbar-links a:hover { background: rgba(255,255,255,.22); color: #fff; }
-.vbar-links a.on { background: #fff; color: var(--ink); }
-
 /* ============ 글 하단 에디터 소개 ============ */
 .bio {
   margin-top: 48px; padding: 24px 22px;
@@ -443,24 +385,19 @@ textarea { resize: vertical; min-height: 70px; }
 .bio-ig { font-size: 16px; flex: 0 0 auto; }
 .bio-link-arrow { color: var(--ink-3); flex: 0 0 auto; }
 
-/* ============ C안 모바일: 카드를 가로형으로 (스크롤 단축) ============ */
+/* ============ 모바일: 카드를 가로형으로 (스크롤 단축) ============ */
 @media (max-width: 619px) {
-  .thumbs .grid { gap: 12px; }
-  .thumbs .grid .card { flex-direction: row; align-items: stretch; }
-  .thumbs .grid .card .card-media {
-    flex: 0 0 118px; aspect-ratio: 1 / 1; align-self: stretch;
-  }
-  .thumbs .grid .card .card-media img { height: 100%; }
-  .thumbs .grid .card .kind-chip {
-    top: 6px; left: 6px; font-size: 10px; padding: 2px 6px;
-  }
-  .thumbs .grid .card .card-text {
-    padding: 12px 13px; gap: 5px; justify-content: center; min-width: 0;
-  }
-  .thumbs .grid .card .card-title { font-size: 14.5px; }
-  .thumbs .grid .card .card-summary { font-size: 12.5px; -webkit-line-clamp: 2; }
-  .thumbs .grid .card .card-cat { font-size: 10.5px; padding: 2px 7px; }
-  .thumbs .cat-section { margin-top: 34px; }
+  .grid { gap: 12px; }
+  .grid .card { flex-direction: row; align-items: stretch; }
+  .grid .card .card-media { flex: 0 0 118px; aspect-ratio: 1 / 1; align-self: stretch; }
+  .grid .card .card-media img { height: 100%; }
+  .grid .card .card-media-ph { font-size: 28px; }
+  .grid .card .kind-chip { top: 6px; left: 6px; font-size: 10px; padding: 2px 6px; }
+  .grid .card .card-text { padding: 12px 13px; gap: 5px; justify-content: center; min-width: 0; }
+  .grid .card .card-title { font-size: 14.5px; }
+  .grid .card .card-summary { font-size: 12.5px; -webkit-line-clamp: 2; }
+  .grid .card .card-cat { font-size: 10.5px; padding: 2px 7px; }
+  .cat-section { margin-top: 34px; }
 }
 
 /* ============ 토글 블록 (details/summary) ============ */
@@ -500,3 +437,28 @@ textarea { resize: vertical; min-height: 70px; }
 
 /* 에디터 안에서는 항상 펼쳐 보이게 (편집 가능하도록) */
 .editor-area details > div[data-toggle-content] { display: block; }
+
+/* ============ 관리자: 소개 버전 편집기 ============ */
+.bio-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.bio-tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 12px; border-radius: 8px;
+  border: 1px solid var(--line); background: #fff;
+  font-size: 13px; font-weight: 700; color: var(--ink-2); cursor: pointer;
+}
+.bio-tab:hover { background: var(--surface-2); }
+.bio-tab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.bio-tab-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block;
+}
+.bio-tab.on .bio-tab-dot { background: #7fe3a1; }
+.bio-editor {
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 16px; background: var(--surface-2);
+}
+.bio-editor .field:last-of-type { margin-bottom: 12px; }
+.bio-active-note {
+  font-size: 12.5px; font-weight: 700; color: #2c7a3f;
+  background: #eef8f0; border: 1px solid #d8ecdd;
+  padding: 8px 11px; border-radius: 8px;
+}

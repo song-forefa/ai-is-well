@@ -1,9 +1,9 @@
 import type { SiteSettings } from "@/lib/types";
-import { bioFrom } from "@/lib/authorBio";
+import { activeBio } from "@/lib/authorBio";
 
 // 모든 글 하단에 자동으로 붙는 에디터 소개 블록.
 export default function AuthorBio({ settings }: { settings: SiteSettings }) {
-  const bio = bioFrom(settings);
+  const bio = activeBio(settings);
 
   return (
     <aside className="bio">
@@ -15,7 +15,7 @@ export default function AuthorBio({ settings }: { settings: SiteSettings }) {
           <span className="bio-avatar bio-avatar-fallback">🤖</span>
         )}
         <div className="bio-name">
-          {bio.name} <span className="bio-handle">({bio.handle})</span>
+          {bio.name} <span className="bio-handle">({settings.handle})</span>
         </div>
       </div>
 
@@ -25,7 +25,7 @@ export default function AuthorBio({ settings }: { settings: SiteSettings }) {
         <a className="bio-link" href={bio.linkUrl} target="_blank" rel="noopener noreferrer">
           <span className="bio-ig" aria-hidden>📷</span>
           <span>
-            Instagram <b>{bio.linkLabel}</b>
+            Instagram <b>{bio.linkLabel || bio.linkUrl}</b>
           </span>
           <span className="bio-link-arrow" aria-hidden>↗</span>
         </a>

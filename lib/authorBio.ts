@@ -1,11 +1,19 @@
 import type { SiteSettings } from "@/lib/types";
 
-// 모든 글 하단에 자동으로 붙는 에디터 소개.
-// site_settings 에 값이 있으면 그걸 쓰고, 없으면 아래 기본값을 쓴다.
-// (site_settings 컬럼은 supabase/migration_author_bio.sql 로 추가 — 선택 사항)
-export const DEFAULT_BIO = {
+// 글 하단 에디터 소개. 버전을 최대 3개까지 저장해 두고 하나를 골라 쓴다.
+export const BIO_SLOTS = 3;
+
+export type BioVersion = {
+  label: string;
+  name: string;
+  text: string;
+  linkUrl: string;
+  linkLabel: string;
+};
+
+export const DEFAULT_BIO: BioVersion = {
+  label: "기본",
   name: "애즈웰",
-  handle: "@ai.is.well",
   text: `현대인을 위한 AI 트렌드 소식부터,
 취업에 활용할 수 있는 AI 꿀팁과 트렌디한 소식
 빠르게 전달드릴게요.
@@ -15,14 +23,37 @@ export const DEFAULT_BIO = {
   linkLabel: "애즈웰 | AI로 잘 먹고 잘 살기 (@ai.is.well)",
 };
 
-export type Bio = typeof DEFAULT_BIO;
+function emptyVersion(i: number): BioVersion {
+  return { label: `버전 ${i + 1}`, name: "", text: "", linkUrl: "", linkLabel: "" };
+}
 
-export function bioFrom(settings: SiteSettings): Bio {
+// DB 에서 읽은 값을 항상 3칸 배열로 정규화한다. (컬럼이 없거나 비어 있어도 안전)
+export function bioVersions(settings: SiteSettings): BioVersion[] {
+  const raw = Array.isArray(settings.author_bios) ? settings.author_bios : [];
+  return Array.from({ length: BIO_SLOTS }, (_, i) => {
+    const v = (raw[i] ?? {}) as Partial<BioVersion>;
+    const base = i === 0 ? DEFAULT_BIO : emptyVersion(i);
+    return {
+      label: (v.label ?? "").trim() || base.label,
+      name: v.name ?? base.name,
+      text: v.text ?? base.text,
+      linkUrl: v.linkUrl ?? base.linkUrl,
+      linkLabel: v.linkLabel ?? base.linkLabel,
+    };
+  });
+}
+
+export function activeIndex(settings: SiteSettings): number {
+  const i = Number(settings.author_bio_active ?? 0);
+  return Number.isInteger(i) && i >= 0 && i < BIO_SLOTS ? i : 0;
+}
+
+// 실제 글 하단에 노출할 버전. 선택된 버전이 비어 있으면 기본값으로 되돌린다.
+export function activeBio(settings: SiteSettings): BioVersion {
+  const v = bioVersions(settings)[activeIndex(settings)];
   return {
-    name: settings.author_name?.trim() || DEFAULT_BIO.name,
-    handle: settings.handle?.trim() || DEFAULT_BIO.handle,
-    text: settings.author_bio?.trim() || DEFAULT_BIO.text,
-    linkUrl: settings.author_link_url?.trim() || DEFAULT_BIO.linkUrl,
-    linkLabel: settings.author_link_label?.trim() || DEFAULT_BIO.linkLabel,
+    ...v,
+    name: v.name.trim() || DEFAULT_BIO.name,
+    text: v.text.trim() || DEFAULT_BIO.text,
   };
 }
