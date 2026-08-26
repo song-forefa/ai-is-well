@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { adminClient } from "@/utils/supabase/admin";
 import type { Item } from "@/lib/types";
 import ItemForm from "@/components/ItemForm";
+import { loadCategories } from "@/lib/loadCategories";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,10 @@ export default async function EditItemPage({
 }) {
   const { id } = await params;
   const sb = adminClient();
-  const { data } = await sb.from("items").select("*").eq("id", id).maybeSingle();
+  const [{ data }, categories] = await Promise.all([
+    sb.from("items").select("*").eq("id", id).maybeSingle(),
+    loadCategories(),
+  ]);
   if (!data) notFound();
-  return <ItemForm item={data as Item} />;
+  return <ItemForm item={data as Item} categories={categories} />;
 }

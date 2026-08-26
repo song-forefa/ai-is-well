@@ -38,32 +38,27 @@ export default function ImageField({
   return (
     <div className="field">
       <label>{label}</label>
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        {value ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={value}
-            alt=""
-            style={{ width: 48, height: 48, borderRadius: 8, objectFit: "cover", flex: "0 0 auto" }}
-          />
-        ) : null}
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="https://…"
-        />
+      <div className="imgfield">
         <button
           type="button"
           className="btn sm"
           disabled={busy}
           onClick={() => fileRef.current?.click()}
-          style={{ flex: "0 0 auto" }}
         >
-          {busy ? "업로드 중…" : "업로드"}
+          {busy ? "업로드 중…" : "⬆ 업로드"}
         </button>
         {value ? (
-          <button type="button" className="btn sm" onClick={() => onChange("")} style={{ flex: "0 0 auto" }}>
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="imgfield-preview" src={value} alt="" />
+        ) : null}
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="업로드하거나 이미지 주소를 붙여넣으세요"
+        />
+        {value ? (
+          <button type="button" className="btn sm" onClick={() => onChange("")}>
             지우기
           </button>
         ) : null}

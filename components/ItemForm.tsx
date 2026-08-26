@@ -6,21 +6,21 @@ import dynamic from "next/dynamic";
 import type { Item } from "@/lib/types";
 import { slugify } from "@/lib/slug";
 import ImageField from "@/components/ImageField";
+import CategoryField from "@/components/CategoryField";
 
 const Editor = dynamic(() => import("@/components/Editor"), {
   ssr: false,
   loading: () => <div className="editor"><div className="editor-area">에디터 불러오는 중…</div></div>,
 });
 
-type Props = { item?: Item };
+type Props = { item?: Item; categories?: string[] };
 
-export default function ItemForm({ item }: Props) {
+export default function ItemForm({ item, categories = [] }: Props) {
   const router = useRouter();
   const editing = Boolean(item);
 
   const [kind, setKind] = useState<"link" | "post">(item?.kind ?? "link");
   const [title, setTitle] = useState(item?.title ?? "");
-  const [emoji, setEmoji] = useState(item?.emoji ?? "");
   const [summary, setSummary] = useState(item?.summary ?? "");
   const [category, setCategory] = useState(item?.category ?? "");
   const [thumb, setThumb] = useState(item?.thumbnail_url ?? "");
@@ -41,7 +41,6 @@ export default function ItemForm({ item }: Props) {
       const body = {
         kind,
         title,
-        emoji,
         summary,
         category,
         thumbnail_url: thumb,
@@ -133,27 +132,7 @@ export default function ItemForm({ item }: Props) {
             placeholder="예) 공짜로 👉클로드 AI 공식강의👈 들으러가기"
           />
         </div>
-        <div className="two-col">
-          <div className="field">
-            <label>이모지 (선택)</label>
-            <input
-              type="text"
-              value={emoji}
-              onChange={(e) => setEmoji(e.target.value)}
-              placeholder="🗣"
-            />
-            <div className="hint">제목 앞에 붙습니다. 제목에 직접 넣어도 됩니다.</div>
-          </div>
-          <div className="field">
-            <label>카테고리 (선택)</label>
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="면접 / 자소서 / 툴 추천"
-            />
-          </div>
-        </div>
+        <CategoryField value={category} onChange={setCategory} options={categories} />
         <div className="field">
           <label>한 줄 설명 (선택)</label>
           <textarea
@@ -166,7 +145,7 @@ export default function ItemForm({ item }: Props) {
           label="썸네일 (선택)"
           value={thumb}
           onChange={setThumb}
-          hint="비워 두면 스크린샷처럼 제목만 가운데 정렬된 심플 카드로 보입니다."
+          hint="권장 규격 1200 × 675px (16:9), 1MB 이하. 비워 두면 색 블록 + 이모지가 대신 들어갑니다."
         />
       </div>
 
