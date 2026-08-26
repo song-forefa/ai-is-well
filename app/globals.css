@@ -221,11 +221,16 @@ button { font-family: inherit; }
 
 .prose { font-size: 16.5px; line-height: 1.8; color: #22252b; }
 .prose p { margin: 0 0 15px; }
-.prose h1, .prose h2, .prose h3, .prose h4 { line-height: 1.4; margin: 36px 0 13px; letter-spacing: -0.025em; }
-.prose h1 { font-size: 27px; }
-.prose h2 { font-size: 24px; }
-.prose h3 { font-size: 20px; }
-.prose h4 { font-size: 17.5px; }
+/* 본문 16.5px 기준 — 각 단계가 확실히 구분되도록 배율을 벌린다.
+   툴바 H1=h2(28px) / H2=h3(23px) / H3=h4(19px) */
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  line-height: 1.35; letter-spacing: -0.03em; font-weight: 800;
+}
+.prose h1 { font-size: 32px; margin: 44px 0 14px; }
+.prose h2 { font-size: 28px; margin: 42px 0 14px; }
+.prose h3 { font-size: 23px; margin: 34px 0 12px; }
+.prose h4 { font-size: 19px; margin: 28px 0 10px; }
+.prose > :first-child { margin-top: 0; }
 .prose ul, .prose ol { margin: 0 0 15px; padding-left: 22px; }
 .prose li { margin-bottom: 7px; }
 .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
@@ -242,6 +247,7 @@ button { font-family: inherit; }
 .prose pre code { background: none; padding: 0; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
 .prose u { text-decoration: underline; text-underline-offset: 2px; }
+.prose span[style*="color"] { font-weight: inherit; }
 
 /* ============ 푸터 ============ */
 .site-footer { border-top: 1px solid var(--line); background: var(--surface-2); margin-top: 24px; }

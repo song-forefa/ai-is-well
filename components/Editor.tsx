@@ -6,11 +6,16 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { ToggleBlock, ToggleContent, ToggleSummary } from "@/lib/tiptap/toggle";
 import { Placeholder } from "@tiptap/extensions";
+import { Color, TextStyle } from "@tiptap/extension-text-style";
 
 type Props = {
   value: string;
   onChange: (html: string) => void;
 };
+
+// 본문에서 쓸 강조 색 두 가지
+const BLUE = "#2f6bff";
+const RED = "#e03131";
 
 function Btn({
   editor,
@@ -61,6 +66,8 @@ export default function Editor({ value, onChange }: Props) {
       ToggleBlock,
       ToggleSummary,
       ToggleContent,
+      TextStyle,
+      Color,
     ],
     content: value || "",
     editorProps: {
@@ -135,6 +142,28 @@ export default function Editor({ value, onChange }: Props) {
         <Btn editor={editor} title="취소선" active={editor?.isActive("strike")}
           onClick={() => editor?.chain().focus().toggleStrike().run()}>
           <s>S</s>
+        </Btn>
+
+        <Btn editor={editor} title="파란색 글씨" active={editor?.isActive("textStyle", { color: BLUE })}
+          onClick={() =>
+            editor?.isActive("textStyle", { color: BLUE })
+              ? editor.chain().focus().unsetColor().run()
+              : editor?.chain().focus().setColor(BLUE).run()
+          }>
+          <span style={{ color: BLUE }}>가</span>
+        </Btn>
+        <Btn editor={editor} title="빨간색 글씨" active={editor?.isActive("textStyle", { color: RED })}
+          onClick={() =>
+            editor?.isActive("textStyle", { color: RED })
+              ? editor.chain().focus().unsetColor().run()
+              : editor?.chain().focus().setColor(RED).run()
+          }>
+          <span style={{ color: RED }}>가</span>
+        </Btn>
+        <Btn editor={editor} title="글씨색 없애기"
+          onClick={() => editor?.chain().focus().unsetColor().run()}>
+          <span style={{ color: "var(--ink-2)" }}>가</span>
+          <span style={{ fontSize: 10 }}>✕</span>
         </Btn>
 
         <span className="sep" />
