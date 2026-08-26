@@ -78,9 +78,15 @@ export default function AdminList({ initial }: { initial: Item[] }) {
 
   return (
     <div className="panel">
-      <h2>항목 {items.length}개 · 위에 있을수록 페이지 상단에 노출</h2>
+      <h2>
+        항목 {items.length}개 · <b>맨 위 항목이 홈 상단에 크게(히어로) 노출</b>되고,
+        나머지는 카테고리별 섹션으로 묶입니다
+      </h2>
       {items.map((item, i) => (
-        <div className={`row${item.published ? "" : " off"}`} key={item.id}>
+        <div
+          className={`row${item.published ? "" : " off"}${i === 0 && item.published ? " first" : ""}`}
+          key={item.id}
+        >
           <div className="grip">
             <button className="btn sm" onClick={() => move(i, -1)} disabled={busy || i === 0} title="위로">
               ↑
@@ -112,6 +118,7 @@ export default function AdminList({ initial }: { initial: Item[] }) {
             </div>
           </div>
 
+          {i === 0 && item.published ? <span className="badge hero">히어로</span> : null}
           <span className={`badge ${item.kind}`}>{item.kind === "link" ? "링크" : "글"}</span>
           {!item.published ? <span className="badge draft">비공개</span> : null}
 

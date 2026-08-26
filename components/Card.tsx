@@ -1,47 +1,48 @@
 import Link from "next/link";
 import type { Item } from "@/lib/types";
+import { itemHref, placeholderGlyph, placeholderStyle } from "@/lib/itemView";
 
-// 링크형 → /l/{id} (클릭 집계 후 외부로 리다이렉트)
-// 글형   → /p/{slug}
+// 매거진 그리드의 기본 카드. 썸네일이 없으면 그라디언트 + 이모지로 채운다.
 export default function Card({ item }: { item: Item }) {
-  const href =
-    item.kind === "link" ? `/l/${item.id}` : `/p/${item.slug ?? item.id}`;
   const external = item.kind === "link";
-  const bare = !item.thumbnail_url && !item.summary && !item.category;
-
+  // 썸네일이 없으면 이미지 영역을 얇은 띠로 줄여 목록이 길어지지 않게 한다.
+  const cls = `card${item.thumbnail_url ? "" : " no-thumb"}`;
   const inner = (
-    <div className="card-row">
-      {item.thumbnail_url ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img className="card-thumb" src={item.thumbnail_url} alt="" />
-      ) : null}
-      <div className="card-body">
-        <div className="card-title">
+    <>
+      <div className="card-media">
+        {item.thumbnail_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.thumbnail_url} alt="" loading="lazy" />
+        ) : (
+          <span className="card-media-ph" style={placeholderStyle(item.id)}>
+            {placeholderGlyph(item)}
+          </span>
+        )}
+        <span className={`kind-chip ${item.kind}`}>
+          {external ? "링크" : "글"}
+        </span>
+      </div>
+
+      <div className="card-text">
+        {item.category ? <span className="card-cat">{item.category}</span> : null}
+        <h3 className="card-title">
           {item.emoji ? `${item.emoji} ` : ""}
           {item.title}
-        </div>
-        {item.summary ? <div className="card-summary">{item.summary}</div> : null}
-        {item.category ? (
-          <div className="card-meta">
-            <span className="card-tag">{item.category}</span>
-          </div>
-        ) : null}
+        </h3>
+        {item.summary ? <p className="card-summary">{item.summary}</p> : null}
       </div>
-      {!bare ? <span className="card-arrow">›</span> : null}
-    </div>
+    </>
   );
-
-  const className = `card${bare ? " centered" : ""}`;
 
   if (external) {
     return (
-      <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+      <a className={cls} href={itemHref(item)} target="_blank" rel="noopener noreferrer">
         {inner}
       </a>
     );
   }
   return (
-    <Link className={className} href={href}>
+    <Link className={cls} href={itemHref(item)}>
       {inner}
     </Link>
   );

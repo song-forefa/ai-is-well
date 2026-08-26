@@ -1,6 +1,10 @@
 import { publicClient } from "@/utils/supabase/public";
 import type { Item, SiteSettings } from "@/lib/types";
+import { categoriesInOrder } from "@/lib/itemView";
 import Card from "@/components/Card";
+import Hero from "@/components/Hero";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +16,11 @@ const DEFAULTS: SiteSettings = {
   footer_text: null,
 };
 
-async function load(): Promise<{ items: Item[]; settings: SiteSettings; error: string | null }> {
+const UNCATEGORIZED = "그 외";
+
+async function load(): Promise<{ items: Item[]; settings: SiteSettings; envMissing: boolean }> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    return { items: [], settings: DEFAULTS, error: "env" };
+    return { items: [], settings: DEFAULTS, envMissing: true };
   }
   const sb = publicClient();
   const [itemsRes, settingsRes] = await Promise.all([
@@ -30,30 +36,32 @@ async function load(): Promise<{ items: Item[]; settings: SiteSettings; error: s
   return {
     items: (itemsRes.data as Item[] | null) ?? [],
     settings: (settingsRes.data as SiteSettings | null) ?? DEFAULTS,
-    error: itemsRes.error?.message ?? null,
+    envMissing: false,
   };
 }
 
 export default async function HomePage() {
-  const { items, settings, error } = await load();
+  const { items, settings, envMissing } = await load();
+
+  // 맨 위 항목은 히어로로, 나머지는 카테고리 섹션으로.
+  const [featured, ...rest] = items;
+  const categories = categoriesInOrder(rest);
+  const sections: { name: string; items: Item[] }[] = [
+    ...categories.map((name) => ({
+      name,
+      items: rest.filter((i) => i.category?.trim() === name),
+    })),
+    { name: UNCATEGORIZED, items: rest.filter((i) => !i.category?.trim()) },
+  ].filter((s) => s.items.length > 0);
 
   return (
-    <main className="hub">
-      <header className="profile">
-        {settings.avatar_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img className="avatar" src={settings.avatar_url} alt={settings.handle} />
-        ) : (
-          <div className="avatar-fallback">🤖</div>
-        )}
-        <h1>{settings.handle}</h1>
-        <p>{settings.tagline}</p>
-      </header>
+    <>
+      <SiteHeader settings={settings} categories={sections.map((s) => s.name)} />
 
-      <div className="cards">
+      <main className="site">
         {items.length === 0 ? (
           <div className="empty">
-            {error === "env" ? (
+            {envMissing ? (
               <>
                 Supabase 환경변수가 아직 설정되지 않았어요.
                 <br />
@@ -63,21 +71,36 @@ export default async function HomePage() {
               <>
                 아직 등록된 항목이 없어요.
                 <br />
-                <a href="/admin" style={{ color: "var(--accent)", fontWeight: 700 }}>
-                  관리자 페이지
-                </a>
-                에서 첫 항목을 추가해 보세요.
+                <a href="/admin">관리자 페이지</a>에서 첫 항목을 추가해 보세요.
               </>
             )}
           </div>
         ) : (
-          items.map((item) => <Card key={item.id} item={item} />)
-        )}
-      </div>
+          <>
+            <Hero item={featured ?? null} settings={settings} />
 
-      {settings.footer_text ? (
-        <div className="hub-footer">{settings.footer_text}</div>
-      ) : null}
-    </main>
+            {sections.map((section) => (
+              <section
+                className="cat-section"
+                key={section.name}
+                id={`cat-${encodeURIComponent(section.name)}`}
+              >
+                <div className="cat-head">
+                  <h2>{section.name}</h2>
+                  <span className="cat-count">{section.items.length}</span>
+                </div>
+                <div className="grid">
+                  {section.items.map((item) => (
+                    <Card key={item.id} item={item} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </>
+        )}
+      </main>
+
+      <SiteFooter settings={settings} />
+    </>
   );
 }
