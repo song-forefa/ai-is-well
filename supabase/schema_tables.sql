@@ -72,11 +72,3 @@ drop policy if exists "settings public read" on public.site_settings;
 create policy "settings public read" on public.site_settings
   for select using (true);
 
--- ============================================================
--- 5) 이미지 업로드용 스토리지 버킷 (public)
--- ============================================================
--- public = true 인 버킷은 다운로드 시 RLS 를 타지 않으므로 별도 select 정책이 필요 없다.
--- 업로드는 서버에서 service_role 로만 하므로 insert 정책도 필요 없다.
-insert into storage.buckets (id, name, public)
-values ('media', 'media', true)
-on conflict (id) do update set public = true;
