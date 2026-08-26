@@ -23,7 +23,9 @@ export default function ItemForm({ item, meta }: Props) {
   const [kind, setKind] = useState<"link" | "post">(item?.kind ?? "link");
   const [title, setTitle] = useState(item?.title ?? "");
   const [summary, setSummary] = useState(item?.summary ?? "");
-  const [category, setCategory] = useState(item?.category ?? "");
+  const [cats, setCats] = useState<string[]>(
+    () => item?.categories?.filter(Boolean) ?? (item?.category ? [item.category] : [])
+  );
   const [thumb, setThumb] = useState(item?.thumbnail_url ?? "");
   const [url, setUrl] = useState(item?.url ?? "");
   const [slug, setSlug] = useState(item?.slug ?? "");
@@ -45,7 +47,7 @@ export default function ItemForm({ item, meta }: Props) {
         kind,
         title,
         summary,
-        category,
+        categories: cats,
         thumbnail_url: thumb,
         url,
         slug,
@@ -136,7 +138,7 @@ export default function ItemForm({ item, meta }: Props) {
             placeholder="예) 공짜로 👉클로드 AI 공식강의👈 들으러가기"
           />
         </div>
-        <CategoryField value={category} onChange={setCategory} options={meta.categories} />
+        <CategoryField value={cats} onChange={setCats} options={meta.categories} />
         <div className="field">
           <label>한 줄 설명 (선택)</label>
           <textarea

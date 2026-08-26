@@ -1,10 +1,11 @@
 import Link from "next/link";
 import type { Item } from "@/lib/types";
-import { glyphFor, itemHref, placeholderStyle } from "@/lib/itemView";
+import { catsOf, glyphFor, itemHref, placeholderStyle } from "@/lib/itemView";
 
 // 카드. 썸네일이 있으면 16:9 이미지, 없으면 같은 자리에 그라디언트 + 이모지.
 export default function Card({ item }: { item: Item }) {
   const external = item.kind === "link";
+  const cats = catsOf(item);
 
   const inner = (
     <>
@@ -21,9 +22,14 @@ export default function Card({ item }: { item: Item }) {
       </div>
 
       <div className="card-text">
-        {item.category ? (
+        {cats.length > 0 ? (
           <div className="card-tags">
-            <span className="card-cat">{item.category}</span>
+            {cats.slice(0, 2).map((c) => (
+              <span className="card-cat" key={c}>
+                {c}
+              </span>
+            ))}
+            {cats.length > 2 ? <span className="card-cat more">+{cats.length - 2}</span> : null}
           </div>
         ) : null}
         <h3 className="card-title">

@@ -7,7 +7,8 @@ export type Item = {
   emoji: string | null;
   summary: string | null;
   thumbnail_url: string | null;
-  category: string | null;
+  category: string | null;        // 하위호환 — categories[0] 과 같은 값
+  categories?: string[] | null;   // 여러 개 선택
   url: string | null;
   slug: string | null;
   content_html: string | null;

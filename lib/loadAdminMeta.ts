@@ -13,15 +13,19 @@ export type AdminMeta = {
 export async function loadAdminMeta(): Promise<AdminMeta> {
   try {
     const sb = adminClient();
-    const [itemsRes, settingsRes] = await Promise.all([
-      sb.from("items").select("category").not("category", "is", null),
-      sb.from("site_settings").select("*").eq("id", 1).maybeSingle(),
-    ]);
+    // categories 컬럼이 아직 없을 수 있으므로(마이그레이션 전) 실패하면 category 만 읽는다.
+    let itemsRes = await sb.from("items").select("category, categories");
+    if (itemsRes.error) itemsRes = await sb.from("items").select("category");
+    const settingsRes = await sb.from("site_settings").select("*").eq("id", 1).maybeSingle();
 
     const categories: string[] = [];
-    for (const row of (itemsRes.data ?? []) as { category: string | null }[]) {
-      const c = row.category?.trim();
-      if (c && !categories.includes(c)) categories.push(c);
+    type Row = { category: string | null; categories?: string[] | null };
+    for (const row of (itemsRes.data ?? []) as Row[]) {
+      const list = row.categories?.length ? row.categories : row.category ? [row.category] : [];
+      for (const raw of list) {
+        const c = raw?.trim();
+        if (c && !categories.includes(c)) categories.push(c);
+      }
     }
     categories.sort((a, b) => a.localeCompare(b, "ko"));
 

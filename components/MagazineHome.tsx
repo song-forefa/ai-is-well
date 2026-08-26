@@ -1,5 +1,5 @@
 import type { Item, SiteSettings } from "@/lib/types";
-import { categoriesInOrder } from "@/lib/itemView";
+import { catsOf, categoriesInOrder } from "@/lib/itemView";
 import Card from "@/components/Card";
 import Hero from "@/components/Hero";
 import SiteHeader from "@/components/SiteHeader";
@@ -25,9 +25,9 @@ export default function MagazineHome({
   const sections = [
     ...categories.map((name) => ({
       name,
-      items: rest.filter((i) => i.category?.trim() === name),
+      items: rest.filter((i) => catsOf(i).includes(name)),
     })),
-    { name: UNCATEGORIZED, items: rest.filter((i) => !i.category?.trim()) },
+    { name: UNCATEGORIZED, items: rest.filter((i) => catsOf(i).length === 0) },
   ].filter((s) => s.items.length > 0);
 
   return (

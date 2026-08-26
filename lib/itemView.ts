@@ -22,12 +22,19 @@ export function glyphFor(item: Item): string {
   return item.kind === "post" ? "📝" : "🔗";
 }
 
+// 한 항목의 카테고리들. 배열 컬럼이 없으면 예전 단일 컬럼으로 대체한다.
+export function catsOf(item: Item): string[] {
+  const arr = item.categories?.map((c) => c?.trim()).filter(Boolean) as string[] | undefined;
+  if (arr?.length) return arr;
+  const one = item.category?.trim();
+  return one ? [one] : [];
+}
+
 // 카테고리 목록을 정렬 순서(sort_order) 등장 순으로 뽑는다.
 export function categoriesInOrder(items: Item[]): string[] {
   const seen: string[] = [];
   for (const it of items) {
-    const c = it.category?.trim();
-    if (c && !seen.includes(c)) seen.push(c);
+    for (const c of catsOf(it)) if (!seen.includes(c)) seen.push(c);
   }
   return seen;
 }

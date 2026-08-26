@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Item, SiteSettings } from "@/lib/types";
-import { glyphFor, itemHref, placeholderStyle } from "@/lib/itemView";
+import { catsOf, glyphFor, itemHref, placeholderStyle } from "@/lib/itemView";
 
 // 히어로 카드 한 장. compact 는 2개 나란히 놓는 칸반용(작게).
 function HeroCard({ item, compact }: { item: Item; compact: boolean }) {
@@ -29,7 +29,7 @@ function HeroCard({ item, compact }: { item: Item; compact: boolean }) {
 
       <div className="hero-feature-text">
         <span className="hero-eyebrow">
-          {item.category ?? (external ? "추천 링크" : "새 글")}
+          {catsOf(item)[0] ?? (external ? "추천 링크" : "새 글")}
         </span>
         <h2>
           {item.emoji ? `${item.emoji} ` : ""}

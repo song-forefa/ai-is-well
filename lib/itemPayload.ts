@@ -13,6 +13,7 @@ export type ItemPayload = {
   summary: string | null;
   thumbnail_url: string | null;
   category: string | null;
+  categories: string[];
   url: string | null;
   slug: string | null;
   content_html: string | null;
@@ -44,13 +45,21 @@ export function buildItemPayload(body: Record<string, unknown>): ItemPayload {
   const bio_version =
     kind === "post" && Number.isInteger(bvRaw) && bvRaw >= 0 && bvRaw < 3 ? bvRaw : null;
 
+  // 카테고리는 여러 개. 공백 제거·중복 제거 후 최대 5개.
+  const categories = (Array.isArray(body.categories) ? body.categories : [])
+    .map((c) => (typeof c === "string" ? c.trim() : ""))
+    .filter(Boolean)
+    .filter((c, i, arr) => arr.indexOf(c) === i)
+    .slice(0, 5);
+
   return {
     kind,
     title,
     emoji: str(body.emoji),
     summary: str(body.summary),
     thumbnail_url: str(body.thumbnail_url),
-    category: str(body.category),
+    category: categories[0] ?? null,
+    categories,
     url,
     slug,
     content_html,

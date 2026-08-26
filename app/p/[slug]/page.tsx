@@ -6,6 +6,7 @@ import type { Item, SiteSettings } from "@/lib/types";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Card from "@/components/Card";
+import { catsOf } from "@/lib/itemView";
 import AuthorBio from "@/components/AuthorBio";
 
 export const dynamic = "force-dynamic";
@@ -92,7 +93,11 @@ export default async function PostPage({
             <Link className="article-back" href="/">
               ← 목록으로
             </Link>
-            {post.category ? <span className="card-cat">{post.category}</span> : null}
+            {catsOf(post).map((c) => (
+              <span className="card-cat" key={c}>
+                {c}
+              </span>
+            ))}
             <h1>{post.title}</h1>
             {post.summary ? <p className="article-lead">{post.summary}</p> : null}
             <div className="article-meta">{date}</div>
