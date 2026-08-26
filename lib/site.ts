@@ -21,5 +21,5 @@ export const SITE = {
   // Google Search Console 소유권 확인 토큰 (HTML 태그 방식의 content 값).
   // DNS TXT 방식 토큰과는 값이 다르므로, Search Console 에서 "HTML 태그" 를 골라
   // 나온 content 값을 여기에 넣어야 확인이 통과한다.
-  googleVerification: "tHTf6VLycml5hYswh3S_K1MJIMBNEjDN1bhEl_cwkqA",
+  googleVerification: "60-BY6cYj-bPJT9kpqtuQSxJ2KOMI9mmjwOhuXCkH4k",
 };
