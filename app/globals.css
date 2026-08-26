@@ -328,10 +328,12 @@ textarea { resize: vertical; min-height: 70px; }
 .ok { color: #2c7a3f; font-size: 12.5px; margin-top: 10px; }
 
 /* ============ 에디터 ============ */
-.editor { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
+.editor { border: 1px solid var(--line); border-radius: 10px; background: #fff; }
 .editor-bar {
   display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border-bottom: 1px solid var(--line);
-  background: var(--surface-2); position: sticky; top: 0; z-index: 2;
+  background: var(--surface-2); border-radius: 9px 9px 0 0;
+  position: sticky; top: 0; z-index: 20;
+  box-shadow: 0 1px 0 var(--line);
 }
 .editor-bar button {
   height: 30px; min-width: 32px; padding: 0 8px; border-radius: 7px; border: 1px solid transparent;
@@ -339,7 +341,7 @@ textarea { resize: vertical; min-height: 70px; }
 }
 .editor-bar button:hover { background: #fff; border-color: var(--line); }
 .editor-bar .sep { width: 1px; background: var(--line); margin: 4px 3px; }
-.editor-area { padding: 16px; min-height: 320px; }
+.editor-area { padding: 16px; min-height: 320px; border-radius: 0 0 9px 9px; }
 .editor-area:focus { outline: none; }
 .editor-area p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);

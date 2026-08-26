@@ -67,6 +67,15 @@ export default function Editor({ value, onChange }: Props) {
       attributes: {
         class: "editor-area prose",
       },
+      handleDOMEvents: {
+        // <details> 는 summary 를 클릭하면 접히는 게 기본 동작이다.
+        // 편집 중에 접히면 내용을 고칠 수 없으므로 접힘만 막고 커서 이동은 그대로 둔다.
+        click: (_view, event) => {
+          const el = event.target as HTMLElement | null;
+          if (el?.closest("summary")) event.preventDefault();
+          return false;
+        },
+      },
     },
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
   });
