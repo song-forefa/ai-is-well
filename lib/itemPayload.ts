@@ -17,6 +17,7 @@ export type ItemPayload = {
   slug: string | null;
   content_html: string | null;
   published: boolean;
+  bio_version: number | null;
 };
 
 // 폼에서 온 값을 DB 컬럼 형태로 정규화한다. 문제가 있으면 문자열 에러를 던진다.
@@ -38,6 +39,11 @@ export function buildItemPayload(body: Record<string, unknown>): ItemPayload {
     content_html = cleanHtml(typeof body.content_html === "string" ? body.content_html : "");
   }
 
+  // 글 하단 소개 버전: 0~2 만 허용, 그 외/빈값이면 null(사이트 기본값)
+  const bvRaw = Number(body.bio_version);
+  const bio_version =
+    kind === "post" && Number.isInteger(bvRaw) && bvRaw >= 0 && bvRaw < 3 ? bvRaw : null;
+
   return {
     kind,
     title,
@@ -49,5 +55,6 @@ export function buildItemPayload(body: Record<string, unknown>): ItemPayload {
     slug,
     content_html,
     published: body.published !== false,
+    bio_version,
   };
 }

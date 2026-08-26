@@ -7,15 +7,16 @@ import type { Item } from "@/lib/types";
 import { slugify } from "@/lib/slug";
 import ImageField from "@/components/ImageField";
 import CategoryField from "@/components/CategoryField";
+import type { AdminMeta } from "@/lib/loadAdminMeta";
 
 const Editor = dynamic(() => import("@/components/Editor"), {
   ssr: false,
   loading: () => <div className="editor"><div className="editor-area">에디터 불러오는 중…</div></div>,
 });
 
-type Props = { item?: Item; categories?: string[] };
+type Props = { item?: Item; meta: AdminMeta };
 
-export default function ItemForm({ item, categories = [] }: Props) {
+export default function ItemForm({ item, meta }: Props) {
   const router = useRouter();
   const editing = Boolean(item);
 
@@ -28,6 +29,8 @@ export default function ItemForm({ item, categories = [] }: Props) {
   const [slug, setSlug] = useState(item?.slug ?? "");
   const [html, setHtml] = useState(item?.content_html ?? "");
   const [published, setPublished] = useState(item?.published ?? true);
+  // null = 사이트 기본 버전 사용
+  const [bioVersion, setBioVersion] = useState<number | null>(item?.bio_version ?? null);
 
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -48,6 +51,7 @@ export default function ItemForm({ item, categories = [] }: Props) {
         slug,
         content_html: html,
         published,
+        bio_version: bioVersion,
       };
       const res = await fetch(editing ? `/api/admin/items/${item!.id}` : "/api/admin/items", {
         method: editing ? "PATCH" : "POST",
@@ -132,7 +136,7 @@ export default function ItemForm({ item, categories = [] }: Props) {
             placeholder="예) 공짜로 👉클로드 AI 공식강의👈 들으러가기"
           />
         </div>
-        <CategoryField value={category} onChange={setCategory} options={categories} />
+        <CategoryField value={category} onChange={setCategory} options={meta.categories} />
         <div className="field">
           <label>한 줄 설명 (선택)</label>
           <textarea
@@ -178,6 +182,35 @@ export default function ItemForm({ item, categories = [] }: Props) {
               <div className="hint">
                 이 글의 주소: <code>/p/{previewSlug}</code>
               </div>
+            </div>
+          </div>
+
+          <div className="panel">
+            <h2>글 하단 에디터 소개</h2>
+            <div className="cat-picker">
+              <button
+                type="button"
+                className={`cat-chip${bioVersion === null ? " on" : ""}`}
+                onClick={() => setBioVersion(null)}
+              >
+사이트 기본값
+              </button>
+              {meta.bios.map((b, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={`cat-chip${bioVersion === i ? " on" : ""}`}
+                  onClick={() => setBioVersion(i)}
+                >
+                  {b.label || `버전 ${i + 1}`}
+                </button>
+              ))}
+            </div>
+            <div className="hint">
+              이 글 아래에 붙일 소개를 고릅니다. <b>사이트 기본값</b>(현재{" "}
+              {meta.bios[meta.bioDefault]?.label || `버전 ${meta.bioDefault + 1}`})을 두면
+              관리자 → 프로필에서 기본을 바꿀 때 이 글도 함께 바뀝니다. 특정 버전을 고르면
+              이 글만 그 버전으로 고정됩니다.
             </div>
           </div>
 

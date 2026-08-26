@@ -108,7 +108,7 @@ export default async function PostPage({
             dangerouslySetInnerHTML={{ __html: post.content_html ?? "" }}
           />
 
-          <AuthorBio settings={settings} />
+          <AuthorBio settings={settings} version={post.bio_version} />
         </article>
 
         {more.length > 0 ? (

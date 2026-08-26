@@ -2,8 +2,14 @@ import type { SiteSettings } from "@/lib/types";
 import { activeBio } from "@/lib/authorBio";
 
 // 모든 글 하단에 자동으로 붙는 에디터 소개 블록.
-export default function AuthorBio({ settings }: { settings: SiteSettings }) {
-  const bio = activeBio(settings);
+export default function AuthorBio({
+  settings,
+  version,
+}: {
+  settings: SiteSettings;
+  version?: number | null;
+}) {
+  const bio = activeBio(settings, version);
 
   return (
     <aside className="bio">

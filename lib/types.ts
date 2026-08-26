@@ -14,6 +14,8 @@ export type Item = {
   published: boolean;
   sort_order: number;
   click_count: number;
+  // 이 글에서 쓸 에디터 소개 버전 (null = 사이트 기본값)
+  bio_version?: number | null;
   created_at: string;
   updated_at: string;
 };

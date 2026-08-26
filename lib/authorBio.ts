@@ -48,9 +48,18 @@ export function activeIndex(settings: SiteSettings): number {
   return Number.isInteger(i) && i >= 0 && i < BIO_SLOTS ? i : 0;
 }
 
-// 실제 글 하단에 노출할 버전. 선택된 버전이 비어 있으면 기본값으로 되돌린다.
-export function activeBio(settings: SiteSettings): BioVersion {
-  const v = bioVersions(settings)[activeIndex(settings)];
+// 실제 글 하단에 노출할 버전.
+// override 가 0~2 이면 그 버전을, 아니면 사이트 기본 버전을 쓴다.
+// 고른 버전이 비어 있으면 기본 문구로 되돌린다.
+export function activeBio(
+  settings: SiteSettings,
+  override?: number | null
+): BioVersion {
+  const i =
+    typeof override === "number" && Number.isInteger(override) && override >= 0 && override < BIO_SLOTS
+      ? override
+      : activeIndex(settings);
+  const v = bioVersions(settings)[i];
   return {
     ...v,
     name: v.name.trim() || DEFAULT_BIO.name,
