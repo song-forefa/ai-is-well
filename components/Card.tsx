@@ -1,30 +1,56 @@
 import Link from "next/link";
 import type { Item } from "@/lib/types";
-import { itemHref, placeholderGlyph, placeholderStyle } from "@/lib/itemView";
+import { glyphFor, itemHref, placeholderStyle, type Variant } from "@/lib/itemView";
 
-// 매거진 그리드의 기본 카드. 썸네일이 없으면 그라디언트 + 이모지로 채운다.
-export default function Card({ item }: { item: Item }) {
+// 매거진 그리드의 카드.
+//  - 썸네일 있음        → 16:9 이미지
+//  - 썸네일 없고 이모지  → 얇은 그라디언트 띠 + 이모지
+//  - 둘 다 없음          → 이미지 영역 없이 상단 색 띠만
+export default function Card({
+  item,
+  variant = "magazine",
+}: {
+  item: Item;
+  variant?: Variant;
+}) {
   const external = item.kind === "link";
-  // 썸네일이 없으면 이미지 영역을 얇은 띠로 줄여 목록이 길어지지 않게 한다.
-  const cls = `card${item.thumbnail_url ? "" : " no-thumb"}`;
+  const glyph = glyphFor(item, variant);
+  const hasMedia = Boolean(item.thumbnail_url) || Boolean(glyph);
+  const cls = [
+    "card",
+    item.thumbnail_url ? "" : "no-thumb",
+    hasMedia ? "" : "bare",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const chip = (
+    <span className={`kind-chip ${item.kind}`}>{external ? "링크" : "글"}</span>
+  );
+
   const inner = (
     <>
-      <div className="card-media">
-        {item.thumbnail_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumbnail_url} alt="" loading="lazy" />
-        ) : (
-          <span className="card-media-ph" style={placeholderStyle(item.id)}>
-            {placeholderGlyph(item)}
-          </span>
-        )}
-        <span className={`kind-chip ${item.kind}`}>
-          {external ? "링크" : "글"}
-        </span>
-      </div>
+      {hasMedia ? (
+        <div className="card-media">
+          {item.thumbnail_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={item.thumbnail_url} alt="" loading="lazy" />
+          ) : (
+            <span className="card-media-ph" style={placeholderStyle(item.id)}>
+              {glyph}
+            </span>
+          )}
+          {chip}
+        </div>
+      ) : (
+        <span className="card-strip" style={placeholderStyle(item.id)} />
+      )}
 
       <div className="card-text">
-        {item.category ? <span className="card-cat">{item.category}</span> : null}
+        <div className="card-tags">
+          {item.category ? <span className="card-cat">{item.category}</span> : null}
+          {hasMedia ? null : chip}
+        </div>
         <h3 className="card-title">
           {item.emoji ? `${item.emoji} ` : ""}
           {item.title}
