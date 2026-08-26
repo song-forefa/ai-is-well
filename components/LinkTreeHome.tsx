@@ -9,10 +9,6 @@ function LtCard({ item }: { item: Item }) {
 
   const inner = (
     <div className="lt-row">
-      {item.thumbnail_url ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img className="lt-thumb" src={item.thumbnail_url} alt="" loading="lazy" />
-      ) : null}
       <div className="lt-body">
         <div className="lt-title">
           {item.emoji ? `${item.emoji} ` : ""}

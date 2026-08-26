@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Item, SiteSettings } from "@/lib/types";
-import { glyphFor, itemHref, placeholderStyle, type Variant } from "@/lib/itemView";
+import { glyphFor, itemHref, placeholderStyle, thumbFor, type Variant } from "@/lib/itemView";
 
 // 홈 최상단. 소개 문구 + 맨 위 항목을 크게 노출한다.
 export default function Hero({
@@ -13,32 +13,21 @@ export default function Hero({
   variant?: Variant;
 }) {
   const external = item?.kind === "link";
-  const glyph = item ? glyphFor(item, variant) : null;
-  const hasMedia = Boolean(item?.thumbnail_url) || Boolean(glyph);
-  const cls = [
-    "hero-feature",
-    item?.thumbnail_url ? "" : "no-thumb",
-    hasMedia ? "" : "bare",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const thumb = item ? thumbFor(item, variant) : null;
+  const cls = `hero-feature${thumb ? "" : " no-thumb"}`;
 
   const feature = item ? (
     <>
-      {hasMedia ? (
-        <div className="hero-media">
-          {item.thumbnail_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={item.thumbnail_url} alt="" />
-          ) : (
-            <span className="hero-media-ph" style={placeholderStyle(item.id)}>
-              {glyph}
-            </span>
-          )}
-        </div>
-      ) : (
-        <span className="hero-strip" style={placeholderStyle(item.id)} />
-      )}
+      <div className="hero-media">
+        {thumb ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={thumb} alt="" />
+        ) : (
+          <span className="hero-media-ph" style={placeholderStyle(item.id)}>
+            {glyphFor(item)}
+          </span>
+        )}
+      </div>
 
       <div className="hero-feature-text">
         <span className="hero-eyebrow">

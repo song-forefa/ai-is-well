@@ -5,7 +5,7 @@ import VersionBar from "@/components/VersionBar";
 import EmptyNotice from "@/components/EmptyNotice";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "디자인 C · 절충형 — ai.is.well" };
+export const metadata: Metadata = { title: "디자인 C · 썸네일형 — ai.is.well" };
 
 export default async function DesignC() {
   const { items, settings, envMissing } = await loadSite();
@@ -14,7 +14,7 @@ export default async function DesignC() {
       {items.length === 0 ? (
         <EmptyNotice envMissing={envMissing} />
       ) : (
-        <MagazineHome items={items} settings={settings} variant="slim" />
+        <MagazineHome items={items} settings={settings} variant="thumbs" />
       )}
       <VersionBar current="/3" />
     </div>

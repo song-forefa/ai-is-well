@@ -4,7 +4,7 @@ import Link from "next/link";
 const VERSIONS = [
   { path: "/1", label: "A", name: "링크트리형" },
   { path: "/2", label: "B", name: "매거진형" },
-  { path: "/3", label: "C", name: "절충형" },
+  { path: "/3", label: "C", name: "썸네일형" },
 ];
 
 export default function VersionBar({ current }: { current: "/1" | "/2" | "/3" }) {
