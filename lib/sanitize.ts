@@ -14,7 +14,7 @@ export function cleanHtml(dirty: string): string {
     ],
     allowedAttributes: {
       a: ["href", "target", "rel"],
-      img: ["src", "alt", "title", "width", "height"],
+      img: ["src", "alt", "title", "width", "height", "style"],
       span: ["style"],
       // details 의 open 은 일부러 허용하지 않는다 → 공개 페이지에서 접힌 상태로 시작
       div: ["style", "data-toggle-content"],
@@ -25,6 +25,8 @@ export function cleanHtml(dirty: string): string {
     allowedSchemesByTag: { img: ["http", "https", "data"] },
     allowedStyles: {
       "*": {
+        // 본문 이미지 크기 조절용 (40% / 70% / 100% 같은 값)
+        width: [/^\d{1,3}%$/],
         "text-align": [/^left$|^right$|^center$|^justify$/],
         color: [/^#[0-9a-fA-F]{3,8}$/, /^rgb\(/],
         "background-color": [/^#[0-9a-fA-F]{3,8}$/, /^rgb\(/],
