@@ -515,3 +515,32 @@ textarea { resize: vertical; min-height: 70px; }
 .prose img { max-width: 100%; height: auto; }
 .editor-area img { max-width: 100%; height: auto; cursor: pointer; }
 .editor-area img.ProseMirror-selectednode { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ============ 에디터: 크기 조절 이미지 ============ */
+.rimg { margin: 12px 0; display: flex; }
+.rimg[data-align="center"] { justify-content: center; }
+.rimg[data-align="right"] { justify-content: flex-end; }
+.rimg-box { position: relative; display: inline-block; max-width: 100%; line-height: 0; }
+.rimg-box img { width: 100%; height: auto; border-radius: 8px; display: block; }
+.rimg.selected .rimg-box img { outline: 3px solid var(--accent); outline-offset: 2px; }
+.rimg-handle {
+  position: absolute; right: -7px; bottom: -7px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #fff;
+  cursor: nwse-resize; opacity: 0; transition: opacity 0.12s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.rimg-box:hover .rimg-handle, .rimg.selected .rimg-handle { opacity: 1; }
+.rimg-size {
+  position: absolute; left: 8px; top: 8px;
+  font-size: 11px; font-weight: 800; line-height: 1;
+  padding: 4px 7px; border-radius: 6px;
+  background: rgba(20,22,28,.72); color: #fff;
+  opacity: 0; transition: opacity 0.12s ease; pointer-events: none;
+}
+.rimg-box:hover .rimg-size, .rimg.selected .rimg-size { opacity: 1; }
+
+/* ============ 공개 본문: 이미지 정렬 ============ */
+.prose img[data-align="center"] { margin-left: auto; margin-right: auto; }
+.prose img[data-align="right"] { margin-left: auto; margin-right: 0; }
+.prose img[data-align="left"] { margin-left: 0; margin-right: auto; }

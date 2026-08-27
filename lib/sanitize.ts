@@ -14,7 +14,7 @@ export function cleanHtml(dirty: string): string {
     ],
     allowedAttributes: {
       a: ["href", "target", "rel"],
-      img: ["src", "alt", "title", "width", "height", "style"],
+      img: ["src", "alt", "title", "width", "height", "style", "data-align"],
       span: ["style"],
       // details 의 open 은 일부러 허용하지 않는다 → 공개 페이지에서 접힌 상태로 시작
       div: ["style", "data-toggle-content"],

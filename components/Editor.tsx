@@ -3,25 +3,11 @@
 import { useCallback, useRef } from "react";
 import { useEditor, EditorContent, type Editor as TiptapEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
-
-// 본문 이미지에 width(%) 속성을 붙여 크기를 조절할 수 있게 확장한다.
-const SizedImage = Image.extend({
-  addAttributes() {
-    return {
-      ...this.parent?.(),
-      width: {
-        default: null,
-        parseHTML: (el) => (el as HTMLElement).style.width || null,
-        renderHTML: (attrs) =>
-          attrs.width ? { style: `width: ${attrs.width}` } : {},
-      },
-    };
-  },
-});
-import { ToggleBlock, ToggleContent, ToggleSummary } from "@/lib/tiptap/toggle";
+import { ResizableImage } from "@/components/ResizableImage";
+import TextAlign from "@tiptap/extension-text-align";
 import { Placeholder } from "@tiptap/extensions";
 import { Color, TextStyle } from "@tiptap/extension-text-style";
+import { ToggleBlock, ToggleContent, ToggleSummary } from "@/lib/tiptap/toggle";
 
 type Props = {
   value: string;
@@ -32,11 +18,18 @@ type Props = {
 const BLUE = "#2f6bff";
 const RED = "#e03131";
 
-// 본문 이미지 크기 프리셋 (본문 폭 대비 %)
-const IMAGE_SIZES = [
-  { label: "작게", value: "40%" },
-  { label: "보통", value: "70%" },
-  { label: "크게", value: "100%" },
+// 문단·제목 정렬
+const TEXT_ALIGNS = [
+  { value: "left", label: "왼쪽 정렬", icon: "⯇" },
+  { value: "center", label: "가운데 정렬", icon: "⯀" },
+  { value: "right", label: "오른쪽 정렬", icon: "⯈" },
+];
+
+// 이미지 정렬 (크기는 이미지 모서리를 끌어서 조절)
+const IMAGE_ALIGNS = [
+  { value: "left", label: "왼쪽", icon: "⯇" },
+  { value: "center", label: "가운데", icon: "⯀" },
+  { value: "right", label: "오른쪽", icon: "⯈" },
 ];
 
 function Btn({
@@ -100,7 +93,8 @@ export default function Editor({ value, onChange }: Props) {
           HTMLAttributes: { rel: "noopener noreferrer", target: "_blank" },
         },
       }),
-      SizedImage.configure({ inline: false, allowBase64: false }),
+      ResizableImage.configure({ inline: false, allowBase64: false }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "내용을 입력하세요…" }),
       ToggleBlock,
       ToggleSummary,
@@ -230,6 +224,20 @@ export default function Editor({ value, onChange }: Props) {
 
         <span className="sep" />
 
+        {TEXT_ALIGNS.map((a) => (
+          <Btn
+            key={a.value}
+            editor={editor}
+            title={a.label}
+            active={editor?.isActive({ textAlign: a.value })}
+            onClick={() => editor?.chain().focus().setTextAlign(a.value).run()}
+          >
+            {a.icon}
+          </Btn>
+        ))}
+
+        <span className="sep" />
+
         <Btn editor={editor} title="글머리 목록" active={editor?.isActive("bulletList")}
           onClick={() => editor?.chain().focus().toggleBulletList().run()}>
           • 목록
@@ -270,22 +278,22 @@ export default function Editor({ value, onChange }: Props) {
         <span className="sep" />
 
         <span className={`img-size${editor?.isActive("image") ? "" : " off"}`}>
-          <span className="img-size-label">이미지 크기</span>
-          {IMAGE_SIZES.map((sz) => (
+          <span className="img-size-label">이미지</span>
+          {IMAGE_ALIGNS.map((a) => (
             <Btn
-              key={sz.value}
+              key={a.value}
               editor={editor}
               title={
                 editor?.isActive("image")
-                  ? `이미지 ${sz.label}로`
+                  ? `이미지 ${a.label}`
                   : "이미지를 먼저 클릭해서 선택하세요"
               }
-              active={editor?.isActive("image", { width: sz.value })}
+              active={editor?.isActive("image", { align: a.value })}
               onClick={() =>
-                editor?.chain().focus().updateAttributes("image", { width: sz.value }).run()
+                editor?.chain().focus().updateAttributes("image", { align: a.value }).run()
               }
             >
-              {sz.label}
+              {a.icon}
             </Btn>
           ))}
         </span>
